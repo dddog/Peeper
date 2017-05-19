@@ -1,0 +1,56 @@
+package com.peepers.peeper;
+
+import android.content.Context;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.TextView;
+
+import java.util.List;
+
+/**
+ * Created by dddog on 2017/05/19.
+ */
+
+public class DaumListAdapter extends BaseAdapter {
+
+    private Context context;
+    private List<DaumDto> daumList;
+
+    public DaumListAdapter(Context context, List<DaumDto> daumList) {
+        this.context = context;
+        this.daumList = daumList;
+    }
+
+    @Override
+    public int getCount() {
+        return daumList.size();
+    }
+
+    @Override
+    public Object getItem(int i) {
+        return daumList.get(i);
+    }
+
+    @Override
+    public long getItemId(int i) {
+        return i;
+    }
+
+    @Override
+    public View getView(int i, View view, ViewGroup viewGroup) {
+        View v = View.inflate(context, R.layout.daum, null);
+        TextView titleText = (TextView) v.findViewById(R.id.titleText);
+        TextView descriptionText = (TextView) v.findViewById(R.id.descriptionText);
+        TextView linkText = (TextView) v.findViewById(R.id.linkText);
+        TextView pubDateText = (TextView) v.findViewById(R.id.pubDateText);
+
+        titleText.setText(daumList.get(i).getTitle());
+        descriptionText.setText(daumList.get(i).getDescription());
+        linkText.setText(daumList.get(i).getLink());
+        pubDateText.setText(daumList.get(i).getPubDate());
+
+        v.setTag(daumList.get(i).getTitle());
+        return v;
+    }
+}

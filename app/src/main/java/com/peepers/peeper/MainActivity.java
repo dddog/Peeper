@@ -91,8 +91,7 @@ public class MainActivity extends AppCompatActivity {
                         // response
                         Log.d("Response =>", ""+ response);
                         parseJSON(response);
-                        if(!listModels.isEmpty())
-                            listAdapter.notifyDataSetChanged();
+
                     }
                 },
                 new Response.ErrorListener()
@@ -121,26 +120,19 @@ public class MainActivity extends AppCompatActivity {
 
     public void parseJSON(JSONObject json){
         try{
-            JSONObject jsonObject = (JSONObject)json;
             Log.d("PARSEJJSON값확인 =>", ""+json);
-            String title = (String)jsonObject.get("title");
-            String link = (String)jsonObject.get("link");
+            JSONArray jsonItem = json.getJSONArray("items");
+                for (int i = 0; i < jsonItem.length(); i++) {
+                    JSONObject item = jsonItem.getJSONObject(i);
+                    Log.d("item확인=>", ""+item);
 
-            Log.d("parseJSON값확인 =>", ""+title);
-            Log.d("parseJSON값확인 =>", ""+link);
-
-            if(false) {
-                for (int i = 0; i < json.length(); i++) {
-                    JSONObject item = json.getJSONObject(null);
                     ListModel listModel = new ListModel();
                     listModel.setTitle(item.getString("title"));
                     listModel.setLink(item.getString("link"));
                     listModel.setDescription(item.getString("description"));
                     listModel.setBloggername(item.getString("bloggername"));
                     listModels.add(listModel);
-                }
             }
-
         }catch (Exception e){
             e.printStackTrace();
         }

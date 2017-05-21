@@ -10,6 +10,13 @@ public class ListModel {
     private String description;
     private String bloggername;
 
+    public ListModel(String title, String description, String link, String bloggername){
+        this.title = title;
+        this.description = description;
+        this.link = link;
+        this.bloggername = bloggername;
+    }
+
 
 
     public String getTitle() {

@@ -2,7 +2,6 @@ package com.peepers.peeper;
 
 import android.content.Context;
 import android.support.constraint.solver.ArrayLinkedVariables;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +9,8 @@ import android.widget.AbsListView;
 import android.widget.Adapter;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -23,10 +24,11 @@ public class ListAdapter extends BaseAdapter {
     LayoutInflater inflater;
     Context context;
 
-    TextView title;
-    TextView description;
-    TextView link;
-    TextView bloggername;
+    public ListAdapter(Context context, ArrayList<ListModel> items){
+        this.context = context;
+        this.items = items;
+        this.inflater = LayoutInflater.from(context);
+    }
 
     @Override
     public int getCount() {
@@ -45,32 +47,19 @@ public class ListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder;
         if(convertView == null){
-            viewHolder = new ViewHolder();
-            convertView = inflater.inflate(R.layout.custom_item, null);
-            viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.item_title);
-            viewHolder.tvDesc = (TextView) convertView.findViewById(R.id.item_description);
-            viewHolder.tvLink = (TextView) convertView.findViewById(R.id.item_link);
-            viewHolder.tvBlog = (TextView) convertView.findViewById(R.id.item_bloggername);
+            convertView = inflater.inflate(R.layout.custom_item, parent, false);
         }
-        else{
-            viewHolder = (ViewHolder) convertView.getTag();
-        }
+        TextView tv1 = (TextView) convertView.findViewById(R.id.item_title);
+        TextView tv2 = (TextView) convertView.findViewById(R.id.item_description);
+        TextView tv3 = (TextView) convertView.findViewById(R.id.item_link);
+        TextView tv4 = (TextView) convertView.findViewById(R.id.item_bloggername);
 
-        ListModel listModel = items.get(position);
-        viewHolder.tvTitle.setText(listModel.getTitle());
-        viewHolder.tvDesc.setText(listModel.getDescription());
-        viewHolder.tvLink.setText(listModel.getLink());
-        viewHolder.tvBlog.setText(listModel.getBloggername());
+        tv1.setText(items.get(position).getTitle());
+        tv2.setText(items.get(position).getDescription());
+        tv3.setText(items.get(position).getLink());
+        tv4.setText(items.get(position).getBloggername());
+
         return convertView;
     }
-    class  ViewHolder{
-        TextView tvTitle;
-        TextView tvDesc;
-        TextView tvLink;
-        TextView tvBlog;
-
-    }
-
 }

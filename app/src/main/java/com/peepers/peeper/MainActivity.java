@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     static String keyword = "";
 
     RequestQueue requestQueue;
-    ArrayList<ListModel> listModels;
+    ArrayList<ListModel> naverList = new ArrayList<ListModel>();
 
 
     @Override
@@ -62,8 +62,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         listView = (ListView) findViewById(R.id.searchListView);
-        listModels = new ArrayList<ListModel>();
-        //listAdapter = new ListAdapter(MainActivity.this, listModels);
+        naverList = new ArrayList<ListModel>();
+        listAdapter = new ListAdapter(MainActivity.this, naverList);
         listView.setAdapter(listAdapter);
 
 
@@ -112,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
                 return params;
             }
         };
+
         queue.add(postRequest);
         Log.d("QUEUE->", ""+queue);
         Log.d("POSTREQUEST->", ""+postRequest);
@@ -123,15 +124,15 @@ public class MainActivity extends AppCompatActivity {
             Log.d("PARSEJJSON값확인 =>", ""+json);
             JSONArray jsonItem = json.getJSONArray("items");
                 for (int i = 0; i < jsonItem.length(); i++) {
-                    JSONObject item = jsonItem.getJSONObject(i);
-                    Log.d("item확인=>", ""+item);
 
-                    ListModel listModel = new ListModel();
-                    listModel.setTitle(item.getString("title"));
-                    listModel.setLink(item.getString("link"));
-                    listModel.setDescription(item.getString("description"));
-                    listModel.setBloggername(item.getString("bloggername"));
-                    listModels.add(listModel);
+                    JSONObject jsonObject = jsonItem.getJSONObject(i);
+                    Log.d("item확인=>", ""+jsonObject);
+                    String title = jsonObject.getString("title");
+                    String decription = jsonObject.getString("description");
+                    String link = jsonObject.getString("link");
+                    String blogger = jsonObject.getString("bloggername");
+                    naverList.add(i, new ListModel(title, decription, link, blogger));
+
             }
         }catch (Exception e){
             e.printStackTrace();

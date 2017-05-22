@@ -83,12 +83,12 @@ public class SiteListActivity extends AppCompatActivity {
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
+                            siteListAdapter.notifyDataSetChanged();
                         }
                     };
                     DaumRequest daumRequest = new DaumRequest(searchVal, responsListener);
                     RequestQueue queue = Volley.newRequestQueue(SiteListActivity.this);
                     queue.add(daumRequest);
-
                 }
             }
         });

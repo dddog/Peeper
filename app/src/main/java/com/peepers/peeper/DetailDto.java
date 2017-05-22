@@ -7,35 +7,35 @@ import android.os.Parcelable;
  * Created by dddog on 2017/05/19.
  */
 
-public class DaumDto implements Parcelable {
+public class DetailDto implements Parcelable {
     private String title;
     private String description;
     private String link;
     private String pubDate;
 
-    public DaumDto(String title, String description, String link, String pubDate) {
+    public DetailDto(String title, String description, String link, String pubDate) {
         this.title = title;
         this.description = description;
         this.link = link;
         this.pubDate = pubDate;
     }
 
-    protected DaumDto(Parcel in) {
+    protected DetailDto(Parcel in) {
         title = in.readString();
         description = in.readString();
         link = in.readString();
         pubDate = in.readString();
     }
 
-    public static final Creator<DaumDto> CREATOR = new Creator<DaumDto>() {
+    public static final Creator<DetailDto> CREATOR = new Creator<DetailDto>() {
         @Override
-        public DaumDto createFromParcel(Parcel in) {
-            return new DaumDto(in);
+        public DetailDto createFromParcel(Parcel in) {
+            return new DetailDto(in);
         }
 
         @Override
-        public DaumDto[] newArray(int size) {
-            return new DaumDto[size];
+        public DetailDto[] newArray(int size) {
+            return new DetailDto[size];
         }
     };
 

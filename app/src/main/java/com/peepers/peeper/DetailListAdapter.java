@@ -13,12 +13,12 @@ import java.util.List;
  * Created by dddog on 2017/05/19.
  */
 
-public class DaumListAdapter extends BaseAdapter {
+public class DetailListAdapter extends BaseAdapter {
 
     private Context context;
-    private List<DaumDto> daumList;
+    private List<DetailDto> daumList;
 
-    public DaumListAdapter(Context context, List<DaumDto> daumList) {
+    public DetailListAdapter(Context context, List<DetailDto> daumList) {
         this.context = context;
         this.daumList = daumList;
     }
@@ -40,7 +40,7 @@ public class DaumListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        View v = View.inflate(context, R.layout.daum, null);
+        View v = View.inflate(context, R.layout.detail, null);
         TextView titleText = (TextView) v.findViewById(R.id.titleText);
         TextView descriptionText = (TextView) v.findViewById(R.id.descriptionText);
         TextView linkText = (TextView) v.findViewById(R.id.linkText);

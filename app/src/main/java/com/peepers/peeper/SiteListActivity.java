@@ -3,6 +3,7 @@ package com.peepers.peeper;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -30,7 +31,8 @@ public class SiteListActivity extends AppCompatActivity {
     private SiteListAdapter siteListAdapter;
     private List<SiteDto> siteList;
 
-    private ArrayList<DaumDto> daumList;
+    private ArrayList<DetailDto> daumDetailList;
+    private ArrayList<DetailDto> naverDetailList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +50,10 @@ public class SiteListActivity extends AppCompatActivity {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                RequestQueue queue = Volley.newRequestQueue(SiteListActivity.this);
+
                 if( searchTextView.equals("") ) {
+                    // TODO Toast가 안뜸
                     Toast toast = Toast.makeText(SiteListActivity.this, "검색어를 입력하세요", Toast.LENGTH_SHORT);
                     toast.show();
                 } else {
@@ -56,14 +61,14 @@ public class SiteListActivity extends AppCompatActivity {
 
                     String searchVal = searchTextView.getText().toString();
 
-                    daumList = new ArrayList<DaumDto>();
+                    daumDetailList = new ArrayList<DetailDto>();
 
-                    Response.Listener<String> responsListener = new Response.Listener<String>() {
+                    Response.Listener<String> daumResponsListener = new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
                             try {
                                 JSONObject jsonObject = new JSONObject(response).getJSONObject("channel");
-
+                                Log.d("Daum JSON", jsonObject.toString());
                                 SiteDto siteDto = new SiteDto(R.drawable.daum_logo, Integer.parseInt(jsonObject.getString("totalCount")));
 
                                 siteList.add(siteDto);
@@ -73,7 +78,7 @@ public class SiteListActivity extends AppCompatActivity {
                                 while (count < jsonArray.length()) {
                                     JSONObject object = jsonArray.getJSONObject(count);
 
-                                    daumList.add(new DaumDto(StringEscapeUtils.unescapeHtml4(object.getString("title")).toString(),
+                                    daumDetailList.add(new DetailDto(StringEscapeUtils.unescapeHtml4(object.getString("title")).toString(),
                                             StringEscapeUtils.unescapeHtml4(object.getString("description")).toString(),
                                             object.getString("link"),
                                             object.getString("pubDate")));
@@ -86,9 +91,37 @@ public class SiteListActivity extends AppCompatActivity {
                             siteListAdapter.notifyDataSetChanged();
                         }
                     };
-                    DaumRequest daumRequest = new DaumRequest(searchVal, responsListener);
-                    RequestQueue queue = Volley.newRequestQueue(SiteListActivity.this);
+                    DaumRequest daumRequest = new DaumRequest(searchVal, daumResponsListener);
                     queue.add(daumRequest);
+
+                    naverDetailList = new ArrayList<DetailDto>();
+                    Response.Listener<String> naverResponsListener = new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                JSONObject jsonObject = new JSONObject(response);
+                                Log.d("Naver JSON", jsonObject.toString());
+                                SiteDto siteDto = new SiteDto(R.drawable.naver_basic_logo, Integer.parseInt(jsonObject.getString("total")));
+
+                                siteList.add(siteDto);
+
+                                JSONArray jsonItem = jsonObject.getJSONArray("items");
+                                for (int i = 0; i < jsonItem.length(); i++) {
+                                    JSONObject object = jsonItem.getJSONObject(i);
+                                    naverDetailList.add(new DetailDto(StringEscapeUtils.unescapeHtml4(object.getString("title")).toString(),
+                                            StringEscapeUtils.unescapeHtml4(object.getString("description")).toString(),
+                                            object.getString("link"),
+                                            object.getString("postdate")));
+                                }
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            siteListAdapter.notifyDataSetChanged();
+                        }
+                    };
+                    NaverRequest naverRequest = new NaverRequest(searchVal, naverResponsListener);
+                    queue.add(naverRequest);
                 }
             }
         });
@@ -96,8 +129,15 @@ public class SiteListActivity extends AppCompatActivity {
         siteListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                 Intent intent = new Intent(SiteListActivity.this, MainActivity.class);
-                intent.putParcelableArrayListExtra("daumList", daumList);
+                if( R.drawable.daum_logo == siteList.get(position).getLogoID() ) {
+                    intent.putParcelableArrayListExtra("detailList", daumDetailList);
+                    intent.putExtra("siteName", "daum.net");
+                } else if( R.drawable.naver_basic_logo == siteList.get(position).getLogoID() ) {
+                    intent.putParcelableArrayListExtra("detailList", naverDetailList);
+                    intent.putExtra("siteName", "naver.com");
+                }
                 SiteListActivity.this.startActivity(intent);
             }
         });

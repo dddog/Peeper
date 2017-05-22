@@ -1,18 +1,10 @@
 package com.peepers.peeper;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.toolbox.Volley;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,45 +22,51 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Intent intent = getIntent();
+
         daumListView = (ListView) findViewById(R.id.daumListView);
         daumList = new ArrayList<DaumDto>();
+
+
+        daumList = intent.getParcelableArrayListExtra("daumList");
+
         adapter = new DaumListAdapter(getApplicationContext(), daumList);
         daumListView.setAdapter(adapter);
 
-        Button button = (Button) findViewById(R.id.searchButton);
-        textView = (TextView) findViewById(R.id.searchValText);
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                daumList.clear();
-                String searchVal = textView.getText().toString();
 
-                Response.Listener<String> responsListener = new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            JSONArray jsonArray = jsonObject.getJSONObject("channel").getJSONArray("item");
-                            int count = 0;
-                            while (count < jsonArray.length()) {
-                                JSONObject object = jsonArray.getJSONObject(count);
-                                daumList.add(new DaumDto(object.getString("title"),
-                                        object.getString("description"),
-                                        object.getString("link"),
-                                        object.getString("pubDate")));
-                                count++;
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                };
-                DaumRequest daumRequest = new DaumRequest(searchVal, responsListener);
-                RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
-                queue.add(daumRequest);
-            }
-        });
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                daumList.clear();
+//                String searchVal = textView.getText().toString();
+//
+//                Response.Listener<String> responsListener = new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//                        try {
+//                            JSONObject jsonObject = new JSONObject(response);
+//                            JSONArray jsonArray = jsonObject.getJSONObject("channel").getJSONArray("item");
+//                            int count = 0;
+//                            while (count < jsonArray.length()) {
+//                                JSONObject object = jsonArray.getJSONObject(count);
+//
+//                                daumList.add(new DaumDto(Html.fromHtml(StringEscapeUtils.unescapeHtml4(object.getString("title"))).toString(),
+//                                        StringEscapeUtils.unescapeHtml4(object.getString("description")).toString(),
+//                                        object.getString("link"),
+//                                        object.getString("pubDate")));
+//                                count++;
+//                            }
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                };
+//                DaumRequest daumRequest = new DaumRequest(searchVal, responsListener);
+//                RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
+//                queue.add(daumRequest);
+//            }
+//        });
 
 //        RequestQueue requestQueue;
 //        RequestQueue queue = Volley.newRequestQueue(this);

@@ -1,33 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_margin="10dp">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="title"
         android:layout_gravity="center"
-        android:padding="10dp"
-        android:textColor="#ffffff"
-        android:id="@+id/titleText"
-        android:background="@color/colorPrimary"
-        android:textStyle="bold"/>
+        android:textColor="#0225d4"
+        android:id="@+id/titleText"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/colorPrimaryDark">
+        android:layout_marginBottom="15dp">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:text="description"
-            android:padding="3dp"
-            android:layout_marginLeft="8dp"
-            android:textColor="#ffffff"
+            android:textColor="#565658"
             android:id="@+id/descriptionText"/>
 
         <TextView
@@ -35,9 +31,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:text="link"
-            android:padding="3dp"
-            android:layout_marginLeft="8dp"
-            android:textColor="#ffffff"
+            android:textColor="#30af13"
             android:id="@+id/linkText"/>
 
         <TextView
@@ -45,9 +39,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:text="pubDate"
-            android:padding="3dp"
-            android:layout_marginLeft="8dp"
-            android:textColor="#ffffff"
+            android:textColor="#9b9b9b"
             android:id="@+id/pubDateText"
             android:gravity="right"/>
     </LinearLayout>

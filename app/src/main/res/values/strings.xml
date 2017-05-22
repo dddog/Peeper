@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Peeper</string>
+
+    <string name="daum_api_url">https://apis.daum.net/search/web</string>
 </resources>

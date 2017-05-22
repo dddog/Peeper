@@ -1,10 +1,13 @@
 package com.peepers.peeper;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by dddog on 2017/05/19.
  */
 
-public class DaumDto {
+public class DaumDto implements Parcelable {
     private String title;
     private String description;
     private String link;
@@ -16,6 +19,25 @@ public class DaumDto {
         this.link = link;
         this.pubDate = pubDate;
     }
+
+    protected DaumDto(Parcel in) {
+        title = in.readString();
+        description = in.readString();
+        link = in.readString();
+        pubDate = in.readString();
+    }
+
+    public static final Creator<DaumDto> CREATOR = new Creator<DaumDto>() {
+        @Override
+        public DaumDto createFromParcel(Parcel in) {
+            return new DaumDto(in);
+        }
+
+        @Override
+        public DaumDto[] newArray(int size) {
+            return new DaumDto[size];
+        }
+    };
 
     public String getTitle() {
         return title;
@@ -47,5 +69,18 @@ public class DaumDto {
 
     public void setPubDate(String pubDate) {
         this.pubDate = pubDate;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.title);
+        dest.writeString(this.description);
+        dest.writeString(this.link);
+        dest.writeString(this.pubDate);
     }
 }

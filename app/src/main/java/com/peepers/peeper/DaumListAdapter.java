@@ -1,6 +1,7 @@
 package com.peepers.peeper;
 
 import android.content.Context;
+import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -45,8 +46,8 @@ public class DaumListAdapter extends BaseAdapter {
         TextView linkText = (TextView) v.findViewById(R.id.linkText);
         TextView pubDateText = (TextView) v.findViewById(R.id.pubDateText);
 
-        titleText.setText(daumList.get(i).getTitle());
-        descriptionText.setText(daumList.get(i).getDescription());
+        titleText.setText(Html.fromHtml(daumList.get(i).getTitle()));
+        descriptionText.setText(Html.fromHtml(daumList.get(i).getDescription()));
         linkText.setText(daumList.get(i).getLink());
         pubDateText.setText(daumList.get(i).getPubDate());
 

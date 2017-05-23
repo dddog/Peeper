@@ -42,10 +42,12 @@ public class SiteListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = View.inflate(context, R.layout.site_list, null);
         ImageView imageView = (ImageView)v.findViewById(R.id.siteImageView);
+        TextView siteNameTextView = (TextView) v.findViewById(R.id.siteNameTextView);
         TextView textView = (TextView) v.findViewById(R.id.siteTotalTextView);
 
         imageView.setImageResource(siteList.get(position).getLogoID());
-        textView.setText(""+siteList.get(position).getTotalCount());
+        siteNameTextView.setText(siteList.get(position).getSiteName());
+        textView.setText(siteList.get(position).getTotalCount());
 
         return v;
     }

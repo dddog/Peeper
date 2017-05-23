@@ -20,7 +20,8 @@ public class GoogleTask {
     final private String urlStr = "https://www.google.co.kr/webhp?hl=ko&sa=X#newwindow=1&q=";
     private String searchVal = "";
 
-    final @DrawableRes int logoID = R.drawable.googlelogo_color_120x44dp;
+    final @DrawableRes int logoID = R.drawable.google_175x175bb;
+    final String siteName = "구글 웹";
 
     public GoogleTask(String searchVal) {
         this.searchVal = searchVal;
@@ -55,7 +56,7 @@ public class GoogleTask {
             totalCount = "0";
         }
 
-        siteDto = new SiteDto(logoID, totalCount);
+        siteDto = new SiteDto(logoID, siteName, totalCount);
         return siteDto;
     }
 

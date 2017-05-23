@@ -16,21 +16,21 @@ import java.util.List;
 public class DetailListAdapter extends BaseAdapter {
 
     private Context context;
-    private List<DetailDto> daumList;
+    private List<DetailDto> detailList;
 
-    public DetailListAdapter(Context context, List<DetailDto> daumList) {
+    public DetailListAdapter(Context context, List<DetailDto> detailList) {
         this.context = context;
-        this.daumList = daumList;
+        this.detailList = detailList;
     }
 
     @Override
     public int getCount() {
-        return daumList.size();
+        return detailList.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return daumList.get(i);
+        return detailList.get(i);
     }
 
     @Override
@@ -46,12 +46,12 @@ public class DetailListAdapter extends BaseAdapter {
         TextView linkText = (TextView) v.findViewById(R.id.linkText);
         TextView pubDateText = (TextView) v.findViewById(R.id.pubDateText);
 
-        titleText.setText(Html.fromHtml(daumList.get(i).getTitle()));
-        descriptionText.setText(Html.fromHtml(daumList.get(i).getDescription()));
-        linkText.setText(daumList.get(i).getLink());
-        pubDateText.setText(daumList.get(i).getPubDate());
+        titleText.setText(Html.fromHtml(detailList.get(i).getTitle()));
+        descriptionText.setText(Html.fromHtml(detailList.get(i).getDescription()));
+        linkText.setText(detailList.get(i).getLink());
+        pubDateText.setText(detailList.get(i).getPubDate());
 
-        v.setTag(daumList.get(i).getTitle());
+        v.setTag(detailList.get(i).getTitle());
         return v;
     }
 }

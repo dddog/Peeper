@@ -71,7 +71,7 @@ public class SiteListActivity extends AppCompatActivity {
                             try {
                                 JSONObject jsonObject = new JSONObject(response).getJSONObject("channel");
                                 Log.d("Daum JSON", jsonObject.toString());
-                                SiteDto siteDto = new SiteDto(R.drawable.daum_logo, jsonObject.getString("totalCount"));
+                                SiteDto siteDto = new SiteDto(R.drawable.daum_175x175bb, "Daum 웹", jsonObject.getString("totalCount"));
 
                                 siteList.add(siteDto);
 
@@ -104,7 +104,7 @@ public class SiteListActivity extends AppCompatActivity {
                             try {
                                 JSONObject jsonObject = new JSONObject(response);
                                 Log.d("Naver JSON", jsonObject.toString());
-                                SiteDto siteDto = new SiteDto(R.drawable.naver_basic_logo, jsonObject.getString("total"));
+                                SiteDto siteDto = new SiteDto(R.drawable.naver_blog_175x175bb, "네이버 블로그", jsonObject.getString("total"));
 
                                 siteList.add(siteDto);
 
@@ -144,13 +144,13 @@ public class SiteListActivity extends AppCompatActivity {
                     Toast.makeText(SiteListActivity.this, "검색된 결과가 없습니다.", Toast.LENGTH_LONG).show();
                 } else {
                     Intent intent = new Intent(SiteListActivity.this, MainActivity.class);
-                    if( R.drawable.daum_logo == siteList.get(position).getLogoID() ) {
+
+                    if( R.drawable.daum_175x175bb == siteList.get(position).getLogoID() ) {
                         intent.putParcelableArrayListExtra("detailList", daumDetailList);
-                        intent.putExtra("siteName", "daum.net");
-                    } else if( R.drawable.naver_basic_logo == siteList.get(position).getLogoID() ) {
+                    } else if( R.drawable.naver_blog_175x175bb == siteList.get(position).getLogoID() ) {
                         intent.putParcelableArrayListExtra("detailList", naverDetailList);
-                        intent.putExtra("siteName", "naver.com");
                     }
+                    intent.putExtra("siteName", siteDto.getSiteName());
                     SiteListActivity.this.startActivity(intent);
                 }
             }

@@ -6,11 +6,21 @@ public class SiteDto {
 
     private @DrawableRes
     int logoID;
+    private String siteName;
     private String totalCount;
 
-    public SiteDto(int logoID, String totalCount) {
+    public SiteDto(int logoID, String siteName, String totalCount) {
         this.logoID = logoID;
+        this.siteName = siteName;
         this.totalCount = totalCount;
+    }
+
+    public String getSiteName() {
+        return siteName;
+    }
+
+    public void setSiteName(String siteName) {
+        this.siteName = siteName;
     }
 
     public int getLogoID() {

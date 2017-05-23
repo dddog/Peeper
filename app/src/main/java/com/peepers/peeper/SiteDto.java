@@ -6,9 +6,9 @@ public class SiteDto {
 
     private @DrawableRes
     int logoID;
-    private int totalCount;
+    private String totalCount;
 
-    public SiteDto(int logoID, int totalCount) {
+    public SiteDto(int logoID, String totalCount) {
         this.logoID = logoID;
         this.totalCount = totalCount;
     }
@@ -21,11 +21,11 @@ public class SiteDto {
         this.logoID = logoID;
     }
 
-    public int getTotalCount() {
+    public String getTotalCount() {
         return totalCount;
     }
 
-    public void setTotalCount(int totalCount) {
+    public void setTotalCount(String totalCount) {
         this.totalCount = totalCount;
     }
 }

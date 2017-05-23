@@ -1,10 +1,13 @@
 package com.peepers.peeper;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
@@ -34,6 +37,7 @@ public class SiteListActivity extends AppCompatActivity {
     private ArrayList<DetailDto> daumDetailList;
     private ArrayList<DetailDto> naverDetailList;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,10 +56,8 @@ public class SiteListActivity extends AppCompatActivity {
             public void onClick(View v) {
                 RequestQueue queue = Volley.newRequestQueue(SiteListActivity.this);
 
-                if( searchTextView.equals("") ) {
-                    // TODO Toast가 안뜸
-                    Toast toast = Toast.makeText(SiteListActivity.this, "검색어를 입력하세요", Toast.LENGTH_SHORT);
-                    toast.show();
+                if( searchTextView.getText().toString().equals("") ) {
+                    Toast.makeText(SiteListActivity.this, "검색어를 입력하세요", Toast.LENGTH_SHORT).show();
                 } else {
                     siteList.clear();
 
@@ -69,7 +71,7 @@ public class SiteListActivity extends AppCompatActivity {
                             try {
                                 JSONObject jsonObject = new JSONObject(response).getJSONObject("channel");
                                 Log.d("Daum JSON", jsonObject.toString());
-                                SiteDto siteDto = new SiteDto(R.drawable.daum_logo, Integer.parseInt(jsonObject.getString("totalCount")));
+                                SiteDto siteDto = new SiteDto(R.drawable.daum_logo, jsonObject.getString("totalCount"));
 
                                 siteList.add(siteDto);
 
@@ -91,6 +93,7 @@ public class SiteListActivity extends AppCompatActivity {
                             siteListAdapter.notifyDataSetChanged();
                         }
                     };
+                    // Daum api
                     DaumRequest daumRequest = new DaumRequest(searchVal, daumResponsListener);
                     queue.add(daumRequest);
 
@@ -101,7 +104,7 @@ public class SiteListActivity extends AppCompatActivity {
                             try {
                                 JSONObject jsonObject = new JSONObject(response);
                                 Log.d("Naver JSON", jsonObject.toString());
-                                SiteDto siteDto = new SiteDto(R.drawable.naver_basic_logo, Integer.parseInt(jsonObject.getString("total")));
+                                SiteDto siteDto = new SiteDto(R.drawable.naver_basic_logo, jsonObject.getString("total"));
 
                                 siteList.add(siteDto);
 
@@ -120,9 +123,16 @@ public class SiteListActivity extends AppCompatActivity {
                             siteListAdapter.notifyDataSetChanged();
                         }
                     };
+                    // Naver api
                     NaverRequest naverRequest = new NaverRequest(searchVal, naverResponsListener);
                     queue.add(naverRequest);
+
+                    // Html parse
+                    new BackgroundTask().execute(searchTextView.getText().toString());
                 }
+
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(searchTextView.getWindowToken(), 0);
             }
         });
 
@@ -130,16 +140,49 @@ public class SiteListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Intent intent = new Intent(SiteListActivity.this, MainActivity.class);
-                if( R.drawable.daum_logo == siteList.get(position).getLogoID() ) {
-                    intent.putParcelableArrayListExtra("detailList", daumDetailList);
-                    intent.putExtra("siteName", "daum.net");
-                } else if( R.drawable.naver_basic_logo == siteList.get(position).getLogoID() ) {
-                    intent.putParcelableArrayListExtra("detailList", naverDetailList);
-                    intent.putExtra("siteName", "naver.com");
+                SiteDto siteDto = siteList.get(position);
+
+                if( siteDto.getTotalCount().equals("") || siteDto.getTotalCount().equals("0") ) {
+                    Toast.makeText(SiteListActivity.this, "검색된 결과가 없습니다.", Toast.LENGTH_LONG).show();
+                } else {
+                    Intent intent = new Intent(SiteListActivity.this, MainActivity.class);
+                    if( R.drawable.daum_logo == siteList.get(position).getLogoID() ) {
+                        intent.putParcelableArrayListExtra("detailList", daumDetailList);
+                        intent.putExtra("siteName", "daum.net");
+                    } else if( R.drawable.naver_basic_logo == siteList.get(position).getLogoID() ) {
+                        intent.putParcelableArrayListExtra("detailList", naverDetailList);
+                        intent.putExtra("siteName", "naver.com");
+                    }
+                    SiteListActivity.this.startActivity(intent);
                 }
-                SiteListActivity.this.startActivity(intent);
             }
         });
+    }
+
+    class BackgroundTask extends AsyncTask<String, Void, SiteDto> {
+
+        @Override
+        protected SiteDto doInBackground(String... params) {
+            int paramsCount = params.length;
+
+            if( paramsCount > 0 ) {
+                GoogleTask googleTask = new GoogleTask(params[0]);
+                return googleTask.getSiteDto();
+            } else {
+                return null;
+            }
+        }
+
+        @Override
+        public void onProgressUpdate(Void... values) {
+            super.onProgressUpdate();
+        }
+
+        @Override
+        public void onPostExecute(SiteDto siteDto) {
+            if( !siteDto.getTotalCount().equals("") ) {
+                siteList.add(siteDto);
+            }
+        }
     }
 }

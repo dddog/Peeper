@@ -18,7 +18,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
-        <activity android:name=".SiteListActivity"></activity>
+        <activity android:name=".SiteListActivity" />
+        <activity android:name=".WebActivity"></activity>
     </application>
 
 </manifest>

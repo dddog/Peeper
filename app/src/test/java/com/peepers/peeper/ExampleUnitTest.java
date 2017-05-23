@@ -2,6 +2,10 @@ package com.peepers.peeper;
 
 import junit.framework.Assert;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.junit.Test;
 
 import java.io.BufferedReader;
@@ -23,13 +27,13 @@ public class ExampleUnitTest {
         assertEquals(4, 2 + 2);
     }
 
-    @Test
-    public void htmlParseTest() {
+
+    public String htmlParseTest() {
         System.out.println("start...");
+        String output = null;
         String target = "https://www.google.co.kr/search?q=azskw1101@naver.com";
         try {
             URL url = new URL(target);
-            System.out.println("URL : " + url.toString());
 
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95 Safari/537.11");
@@ -56,12 +60,43 @@ public class ExampleUnitTest {
             }
 
 //            System.out.println(stringBuffer.toString());
+            output = stringBuffer.toString();
             bufferedReader.close();
             inputStream.close();
             httpURLConnection.disconnect();
         } catch (Exception e) {
             e.printStackTrace();
         }
+        //Assert.assertNotNull("");
+        return output;
+    }
+
+    @Test
+    public void jsoupTest() throws Exception{
+        Document document = Jsoup.connect("https://www.google.co.kr/search?q=android+httpurlconnection+google&oq=android+httpurlconnection+google&aqs=chrome..69i57.11645j0j4&sourceid=chrome&ie=UTF-8#newwindow=1&q=%EC%95%88%EB%93%9C%EB%A1%9C%EC%9D%B4%EB%93%9C+%EC%9B%B9%ED%81%AC%EB%A1%A4%EB%A7%81").get();
+
+        String selector = "div#resultStats";
+        Elements totalCount = document.select(selector);
+
+        String output = "";
+
+        for( Element element : totalCount ) {
+            output += element.text();
+            output += "\n";
+        }
+        System.out.println(output);
+
+        Assert.assertNotNull("");
+    }
+
+    @Test
+    public void googleTaskTest() {
+        GoogleTask googleTask = new GoogleTask("azskw1101@naver.com");
+        SiteDto siteDto = googleTask.getSiteDto();
+
+        System.out.println("output : " + googleTask.getHtmlStr());
+        System.out.println("total count : " + siteDto.getTotalCount());
+
         Assert.assertNotNull("");
     }
 }

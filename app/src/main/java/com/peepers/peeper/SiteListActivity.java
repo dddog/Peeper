@@ -131,8 +131,6 @@ public class SiteListActivity extends AppCompatActivity {
                     new BackgroundTask().execute(searchTextView.getText().toString());
                 }
 
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(searchTextView.getWindowToken(), 0);
             }
         });
 
@@ -183,6 +181,8 @@ public class SiteListActivity extends AppCompatActivity {
             if( !siteDto.getTotalCount().equals("") ) {
                 siteList.add(siteDto);
             }
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(searchTextView.getWindowToken(), 0);
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.peepers.peeper;
 
 import android.support.annotation.DrawableRes;
+import android.util.Log;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -40,7 +41,9 @@ public class GoogleTask {
         Elements totalCountElements = document.select(selector);
 
         if( totalCountElements != null && totalCountElements.size() > 0 ) {
+            Log.d("totalCountElments",""+totalCountElements);
             output = totalCountElements.get(0).text().trim();
+            Log.d("output", ""+output);
         }
 
         if( !output.equals("") && output.contains("검색결과") ) {
@@ -48,8 +51,10 @@ public class GoogleTask {
 //            Log.d("output", output);
             if( output.contains("약") ) {
                 totalCount = output.split("검색결과 약 ")[1].split("개")[0].trim();
+                Log.d("totalCount", ""+totalCount);
             } else {
                 totalCount = output.split("검색결과 ")[1].split("개")[0].trim();
+                Log.d("totalCount",""+totalCount);
             }
         } else {
             totalCount = "0";
@@ -58,6 +63,5 @@ public class GoogleTask {
         siteDto = new SiteDto(logoID, totalCount);
         return siteDto;
     }
-
 
 }

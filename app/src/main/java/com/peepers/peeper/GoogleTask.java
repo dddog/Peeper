@@ -7,6 +7,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
+import java.io.IOException;
+
 /**
  * Created by dddog on 2017/05/23.
  */
@@ -18,15 +20,20 @@ public class GoogleTask {
     private Document document;
 
 //    final private String urlStr = "https://www.google.co.kr/search?q=";
-    final private String urlStr = "https://www.google.co.kr/webhp?hl=ko&sa=X#newwindow=1&q=";
+    final private String urlStr = "https://www.google.com/search?q=";
     private String searchVal = "";
 
     final @DrawableRes int logoID = R.drawable.googlelogo_color_120x44dp;
 
     public GoogleTask(String searchVal) {
         this.searchVal = searchVal;
-        htmlStr = HttpUtil.getHtmlToString(urlStr+this.searchVal);
-        document = Jsoup.parse(htmlStr);
+        try {
+            document = Jsoup.connect(urlStr+this.searchVal).userAgent("Mozilla/5.0 (Windows; U; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 2.0.50727)").get();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //htmlStr = HttpUtil.getHtmlToString(urlStr+this.searchVal);
+        //document = Jsoup.parse(htmlStr);
     }
 
     public String getHtmlStr() {

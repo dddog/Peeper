@@ -26,6 +26,7 @@ import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -221,27 +222,22 @@ public class SiteListActivity extends AppCompatActivity {
                     int elementSize = 0;
                     String urlValue = searchTextView.getText().toString();
                     Document doc = Jsoup.connect(MAINURL+urlValue).get();
-                    Log.e("값테스트", ""+urlValue);
                     elementSize = doc.select(".r").size();
-                    Element link = doc.select(".r").first();
-                    Log.e("테스트",""+elementSize);
+
+                    Element divResultStats = doc.select("div#resultStats").first();
+                    Log.d("divResultStats=>",""+divResultStats);
 
                     if(elementSize > 0){
 
                         for(int i=0; i<elementSize; i++) {
                             mainTitle =  doc.select(".r").get(i).select("a[href]").text();
-                            Log.e("타이틀값", ""+mainTitle);
                             mainDescription = doc.select(".st").not(".f").get(i).text();
-                            Log.e("내용값", ""+mainDescription);
                             mainLink = doc.select(".r").get(i).select("a").attr("href");
-                            Log.e("링크값", ""+mainLink);
                             mainDate = doc.select("span.st").get(i).select("span.f").text();
                             if(mainDate.isEmpty()){
                                 mainDate = "날짜데이터없음";
                             }
-
                             googleDetailList.add(new DetailDto(mainTitle, mainDescription, mainLink, mainDate));
-                            Log.d("리스트데이터확인", ""+googleDetailList);
                         }
                     }
 

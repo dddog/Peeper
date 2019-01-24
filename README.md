@@ -3,3 +3,6 @@
 
 ## 개발환경
 * Android SDK kitkat
+
+- [ ] 1
+- [x] 2
